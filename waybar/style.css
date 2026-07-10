@@ -1,0 +1,40 @@
+* {
+        font-family: "Maple Mono", "JetBrainsMono Nerd Font", sans-serif;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    window#waybar {
+        background-color: rgba(10, 10, 15, 0.85); /* Gleiches Dunkelgrau wie Rofi/Mako */
+        border: 2px solid rgba(0, 255, 204, 0.3); /* Cyan Glow */
+        border-radius: 12px;
+        color: #E0E0E0;
+    }
+
+    /* Module grundlegendes Styling */
+    #workspaces, #clock, #cpu, #memory, #pulseaudio, #tray {
+        padding: 0 12px;
+        margin: 4px 4px;
+        border-radius: 8px;
+        background-color: rgba(30, 30, 40, 0.6);
+    }
+
+    /* Aktiver Workspace leuchtet Cyan */
+    #workspaces button.active {
+        color: #00FFCC;
+        text-shadow: 0 0 5px #00FFCC;
+    }
+
+    #workspaces button {
+        color: #888888;
+        padding: 0 6px;
+    }
+
+    #clock {
+        color: #E0E0E0;
+    }
+
+    /* Warnungen bei hoher CPU/RAM Auslastung */
+    #cpu.critical, #memory.critical {
+        color: #FF003C;
+    }
