@@ -1,40 +1,53 @@
 * {
-        font-family: "Maple Mono", "JetBrainsMono Nerd Font", sans-serif;
-        font-size: 13px;
-        font-weight: bold;
-    }
+    /* Hardcore Terminal Vibe */
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 13px;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
 
-    window#waybar {
-        background-color: rgba(10, 10, 15, 0.85); /* Gleiches Dunkelgrau wie Rofi/Mako */
-        border: 2px solid rgba(0, 255, 204, 0.3); /* Cyan Glow */
-        border-radius: 12px;
-        color: #E0E0E0;
-    }
+window#waybar {
+    background-color: #000000; /* Tiefschwarz */
+    color: #FFFFFF;
+    border-bottom: 1px solid #333333; /* Eine winzige, harte Trennlinie */
+}
 
-    /* Module grundlegendes Styling */
-    #workspaces, #clock, #cpu, #memory, #pulseaudio, #tray {
-        padding: 0 12px;
-        margin: 4px 4px;
-        border-radius: 8px;
-        background-color: rgba(30, 30, 40, 0.6);
-    }
+/* Abstand zwischen den Modulen */
+.modules-left > widget > label,
+.modules-center > widget > label,
+.modules-right > widget > label,
+#tray {
+    padding: 0 10px;
+}
 
-    /* Aktiver Workspace leuchtet Cyan */
-    #workspaces button.active {
-        color: #00FFCC;
-        text-shadow: 0 0 5px #00FFCC;
-    }
+/* --- Workspaces --- */
+#workspaces button {
+    color: #666666; /* Inaktive Workspaces sind dunkelgrau */
+    background: transparent;
+    padding: 0 4px;
+}
 
-    #workspaces button {
-        color: #888888;
-        padding: 0 6px;
-    }
+#workspaces button.active {
+    color: #00FFCC; /* Aktiver Workspace knallt in Cyan */
+    font-weight: bold;
+}
 
-    #clock {
-        color: #E0E0E0;
-    }
+#workspaces button:hover {
+    color: #FFFFFF;
+    box-shadow: none;
+}
 
-    /* Warnungen bei hoher CPU/RAM Auslastung */
-    #cpu.critical, #memory.critical {
-        color: #FF003C;
-    }
+/* --- Kritische Werte (Rot) --- */
+#memory.warning,
+#cpu.warning,
+#temperature.critical {
+    color: #FF003C;
+}
+
+/* --- Muted Audio (Gelb) --- */
+#pulseaudio.muted {
+    color: #FCE205;
+}
