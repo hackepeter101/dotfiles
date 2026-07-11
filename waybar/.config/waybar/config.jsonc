@@ -58,6 +58,6 @@
     },
     "custom/power": {
         "format": "SYS",
-        "on-click": "rofi -show power-menu" // Oder was auch immer du zum Herunterfahren nutzt
+        "on-click": "kitty" // Guess ill have to type this manualy 4 now
     }
 }
