@@ -20,11 +20,11 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       <centerbox cssName="centerbox">
         <button
           $type="start"
-          onClicked={() => execAsync("echo hello").then(console.log)}
+          onClicked={() => execAsync("kitty").then(console.log)}
           hexpand
           halign={Gtk.Align.CENTER}
         >
-          <label label="Welcome to AGS!" />
+          <label label="Click here for free money!" />
         </button>
         <box $type="center" />
         <menubutton $type="end" hexpand halign={Gtk.Align.CENTER}>
