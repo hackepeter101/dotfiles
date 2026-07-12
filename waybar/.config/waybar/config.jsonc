@@ -2,12 +2,24 @@
     "layer": "top",
     "position": "top",
     "height": 24, // Sehr schmal, nimmt keinen Platz weg
-    
     // --- Layout ---
-    "modules-left": ["cpu", "memory", "temperature"],
-    "modules-center": ["mpris", "hyprland/workspaces"],
-    "modules-right": ["tray", "custom/notification", "pulseaudio", "clock", "custom/power"],
-
+    "modules-left": [
+        "cpu",
+        "memory",
+        "temperature",
+        "custom/Zimmertemperatur-sensor"
+    ],
+    "modules-center": [
+        "mpris",
+        "hyprland/workspaces"
+    ],
+    "modules-right": [
+        "tray",
+        "custom/notification",
+        "pulseaudio",
+        "clock",
+        "custom/power"
+    ],
     // --- Module Links ---
     "cpu": {
         "format": "CPU {usage:2}%",
@@ -20,6 +32,12 @@
     "temperature": {
         "format": "TMP {temperatureC}°C",
         "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input" // Ggf. anpassen, falls er nichts anzeigt
+    },
+    "custom/Zimmertemperatur-sensor": {
+    "exec": "source ~/.config/waybar/secrets.sh && curl -s -H \"Authorization: Bearer $HA_TOKEN\" http://homeassistant.local:8123/api/states/sensor.esphome_web_757cb4_zimmer_temperatur | jq -r '.state | tonumber | (. * 10 | round) / 10'",
+        "interval": 60,
+        "format": " 🌡 {}",
+        "tooltip": false
     },
 
     // --- Module Mitte ---
@@ -34,9 +52,9 @@
     "hyprland/workspaces": {
         "all-outputs": false, // Zeigt Workspaces NUR auf dem Bildschirm, wo sie auch sind
         "format": "[{name}]", // Eckige Klammern für den Terminal-Look
+        "on-click": "activate",
         "disable-scroll": true
     },
-
     // --- Module Rechts ---
     "tray": {
         "spacing": 8
