@@ -10,9 +10,9 @@
 }
 
 window#waybar {
-    background-color: #000000; /* Tiefschwarz */
+    background-color: #050209; /* Tiefschwarz */
     color: #FFFFFF;
-    border-bottom: 1px solid #333333; /* Eine winzige, harte Trennlinie */
+    border-bottom: 1px solid #595c61; /* Eine winzige, harte Trennlinie */
 }
 
 /* Abstand zwischen den Modulen */
@@ -25,18 +25,18 @@ window#waybar {
 
 /* --- Workspaces --- */
 #workspaces button {
-    color: #666666; /* Inaktive Workspaces sind dunkelgrau */
+    color: #595c61; /* Inaktive Workspaces sind dunkelgrau */
     background: transparent;
     padding: 0 4px;
 }
 
 #workspaces button.active {
-    color: #00FFCC; /* Aktiver Workspace knallt in Cyan */
+    color: #ffd23f; 
     font-weight: bold;
 }
 
 #workspaces button:hover {
-    color: #FFFFFF;
+    color: #c4ede9;
     box-shadow: none;
 }
 
@@ -49,5 +49,5 @@ window#waybar {
 
 /* --- Muted Audio (Gelb) --- */
 #pulseaudio.muted {
-    color: #FCE205;
+    color: #ffd23f;
 }
