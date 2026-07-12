@@ -47,11 +47,6 @@ hl.bind("CONTROL + SHIFT + Escape", hl.dsp.exec_cmd(launchPrefix .. TERMINAL .. 
 -- custom launcher (rofi)
 hl.bind(mainMod .. " + Space",      hl.dsp.exec_cmd("rofi -show drun"))
 
--- Cachy default keybinds for Noctalia Shell
---hl.bind(mainMod .. " + Z",          hl.dsp.exec_cmd(noctCall .. "settings toggle"))
---hl.bind(mainMod .. " + X",          hl.dsp.exec_cmd(noctCall .. "controlCenter toggle"))
---hl.bind(mainMod .. " + Space",      hl.dsp.exec_cmd(noctCall .. "launcher toggle"))
---hl.bind(mainMod .. " + period",     hl.dsp.exec_cmd(noctCall .. "launcher emoji"))
 
 
 

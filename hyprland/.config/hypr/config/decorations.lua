@@ -9,25 +9,25 @@ hl.config({
         resize_on_border = true,
         col = {
             active_border = {
-                colors = { CACHYLGREEN, CACHYDGREEN },
+                colors = { green, frozenWater },
                 angle = 45,
             },
-            inactive_border = CACHYGRAY,
+            inactive_border = charcoal,
         },
     },
     group = {
         col = {
-            border_active = CACHYLBLUE,
-            border_inactive = CACHYGRAY,
-            border_locked_active = CACHYDBLUE,
-            border_locked_inactive = CACHYGRAY,
+            border_active = frozenWater,
+            border_inactive = charcoal,
+            border_locked_active = amaranth,
+            border_locked_inactive = charcoal,
         },
         groupbar = {
             col = {
-                active = CACHYLGREEN,
-                inactive = CACHYGRAY,
-                locked_active = CACHYDBLUE,
-                locked_inactive = CACHYGRAY,
+                active = green,
+                inactive = charcoal,
+                locked_active = goldenPollen,
+                locked_inactive = charcoal,
             },
         },
     },
