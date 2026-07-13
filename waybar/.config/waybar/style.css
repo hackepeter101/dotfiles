@@ -1,6 +1,6 @@
 * {
     /* Hardcore Terminal Vibe */
-    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-family: "ttf-ibmplex-mono-nerd", "Maple Mono", monospace;
     font-size: 13px;
     border: none;
     border-radius: 0;
@@ -27,7 +27,7 @@ window#waybar {
 #workspaces button {
     color: #595c61; /* Inaktive Workspaces sind dunkelgrau */
     background: transparent;
-    padding: 0 4px;
+    padding: 0 10px;
 }
 
 #workspaces button.active {
