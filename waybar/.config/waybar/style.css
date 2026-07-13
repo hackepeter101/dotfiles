@@ -40,11 +40,26 @@ window#waybar {
     box-shadow: none;
 }
 
+#custom-qr_left, #custom-qr_right {
+    color: #FF003C;
+    letter-spacing: -2px; /* Schiebt die Blöcke eng zusammen */
+    background-color: transparent;
+    border: none;
+    font-size: 20px; /* Macht die Blöcke etwas größer */
+}
+
+#memory,
+#cpu,
+#temperature,
+#custom-Zimmertemperatur-sensor {
+    background-color: #FF003C;
+}
+
 /* --- Kritische Werte (Rot) --- */
 #memory.warning,
 #cpu.warning,
 #temperature.critical {
-    color: #FF003C;
+    color: #ffd23f;
 }
 
 /* --- Muted Audio (Gelb) --- */

@@ -7,13 +7,15 @@
         "cpu",
         "memory",
         "temperature",
-        "custom/Zimmertemperatur-sensor"
+        "custom/Zimmertemperatur-sensor",
+        "custom/qr_left"
     ],
     "modules-center": [
         "mpris",
         "hyprland/workspaces"
     ],
     "modules-right": [
+        "custom/qr_right",
         "tray",
         "custom/notification",
         "pulseaudio",
@@ -36,7 +38,11 @@
     "custom/Zimmertemperatur-sensor": {
     "exec": "source ~/.config/waybar/secrets.sh && curl -s -H \"Authorization: Bearer $HA_TOKEN\" http://homeassistant.local:8123/api/states/sensor.esphome_web_757cb4_zimmer_temperatur | jq -r '.state | tonumber | (. * 10 | round) / 10'",
         "interval": 60,
-        "format": " 🌡 {}",
+        "format": " 󰽔 {}",
+        "tooltip": false
+    },
+    "custom/qr_left": {
+        "format": " ",
         "tooltip": false
     },
 
@@ -59,6 +65,10 @@
     "tray": {
         "spacing": 8
     },
+    "custom/qr_right": {
+        "format": " ",
+        "tooltip": false
+    },
     "custom/notification": {
         "tooltip": false,
         "format": "",
@@ -77,5 +87,10 @@
     "custom/power": {
         "format": "SYS",
         "on-click": "kitty" // Guess ill have to type this manualy 4 now
+    },
+    "custom/bluetooth": {
+        "format": "",
+        "tooltip": false,
+        "on-click": "rofi-bluetooth"    
     }
 }
