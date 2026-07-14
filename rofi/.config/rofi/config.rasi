@@ -1,0 +1,107 @@
+configuration {
+    modes: [ drun, run, window ];
+    terminal: "kitty";
+    font: "Maple Mono 12";
+    location: 0;
+    lines: 10;
+    show-icons: true;
+    fixed-num-lines: true;
+    case-sensitive: false;
+}
+
+* {
+    bg: #050209ff;
+    panel: #0d0a16f2;
+    fg: #c4ede9ff;
+    muted: #595c61ff;
+    accent: #e41148ff;
+    warn: #ffd23fff;
+}
+
+window {
+    padding: 16px;
+    background-color: @bg;
+    border: 1px;
+    border-color: @muted;
+}
+
+mainbox {
+    spacing: 12px;
+    padding: 0px;
+}
+
+inputbar {
+    padding: 10px 12px;
+    spacing: 8px;
+    background-color: @panel;
+    text-color: @fg;
+    children: [ prompt, entry ];
+}
+
+prompt {
+    text-color: @accent;
+}
+
+entry {
+    text-color: @fg;
+    cursor-color: @accent;
+    placeholder: "Search";
+    placeholder-color: @muted;
+}
+
+listview {
+    padding: 0px;
+    spacing: 4px;
+    fixed-height: false;
+    scrollbar: false;
+    background-color: transparent;
+}
+
+element {
+    padding: 10px 12px;
+    border: 0px;
+    background-color: transparent;
+    text-color: @fg;
+}
+
+element selected.normal {
+    background-color: @accent;
+    text-color: @bg;
+}
+
+element selected.urgent {
+    background-color: @warn;
+    text-color: @bg;
+}
+
+element alternate.normal {
+    background-color: transparent;
+}
+
+element-text {
+    text-color: inherit;
+}
+
+element-icon {
+    size: 1.2em;
+}
+
+message {
+    padding: 10px 12px;
+    background-color: @panel;
+    border: 1px;
+    border-color: @muted;
+    text-color: @warn;
+}
+
+textbox {
+    text-color: @fg;
+}
+
+case-indicator {
+    text-color: @muted;
+}
+
+textbox-prompt-colon {
+    str: "";
+}

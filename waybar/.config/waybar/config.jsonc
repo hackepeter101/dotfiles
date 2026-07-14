@@ -20,7 +20,7 @@
         "custom/notification",
         "pulseaudio",
         "clock",
-        "custom/power"
+        "custom/bluetooth"
     ],
     // --- Module Links ---
     "cpu": {
@@ -84,12 +84,8 @@
         "format": "{:%H:%M:%S}", // Mit Sekunden für den aktiven "Live"-Vibe
         "interval": 1
     },
-    "custom/power": {
-        "format": "SYS",
-        "on-click": "kitty" // Guess ill have to type this manualy 4 now
-    },
     "custom/bluetooth": {
-        "format": "",
+        "format": "  ",
         "tooltip": false,
         "on-click": "rofi-bluetooth"    
     }
