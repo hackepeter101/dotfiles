@@ -61,10 +61,9 @@
         "spacing": 8
     },
     "custom/notification": {
-        "tooltip": false,
         "format": "  ",
-        "on-click": "makoctl dismiss -a", // Alle Notifications wegklicken
-        "on-click-right": "makoctl restore" // Letzte Notification zurückholen
+        "tooltip": "show notifications",
+        "on-click": "swaync-client -t -sw"
     },
     "pulseaudio": {
         "format": "VOL {volume}%",
@@ -84,5 +83,5 @@
         "format": " 󱧾 ",
         "tooltip": false,
         "on-click": "~/dotfiles/scripts/random-wallpaper.sh"
-    }
+    }    
 }
