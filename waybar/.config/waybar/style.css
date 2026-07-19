@@ -7,6 +7,7 @@
     padding: 0;
     margin: 0;
     box-shadow: none;
+    min-height: 0;
 }
 
 window#waybar {
@@ -40,29 +41,19 @@ window#waybar {
     box-shadow: none;
 }
 
-#custom-qr_left, #custom-qr_right {
-    color: #FF003C;
-    letter-spacing: -2px; /* Schiebt die Blöcke eng zusammen */
-    background-color: transparent;
-    border: none;
-    font-size: 20px; /* Macht die Blöcke etwas größer */
-}
-
-#memory,
-#cpu,
-#temperature,
-#custom-Zimmertemperatur-sensor {
-    background-color: #FF003C;
+.modules-left {
+    background-color: #e4d81a; /* Cyberpunk-Gelb */
+    color: #000000; /* Schwarze Schrift für alle linken Module */
 }
 
 /* --- Kritische Werte (Rot) --- */
 #memory.warning,
 #cpu.warning,
 #temperature.critical {
-    color: #ffd23f;
+    color: #c9032f;
 }
 
 /* --- Muted Audio (Gelb) --- */
 #pulseaudio.muted {
-    color: #ffd23f;
+    color: #c9032f;
 }

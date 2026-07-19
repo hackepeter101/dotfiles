@@ -7,19 +7,18 @@
         "cpu",
         "memory",
         "temperature",
-        "custom/Zimmertemperatur-sensor",
-        "custom/qr_left"
+        "custom/Zimmertemperatur-sensor"
     ],
     "modules-center": [
         "mpris",
         "hyprland/workspaces"
     ],
     "modules-right": [
-        "custom/qr_right",
         "tray",
         "custom/notification",
         "pulseaudio",
         "clock",
+        "custom/wallpaper",
         "custom/bluetooth"
     ],
     // --- Module Links ---
@@ -38,11 +37,7 @@
     "custom/Zimmertemperatur-sensor": {
     "exec": "source ~/.config/waybar/secrets.sh && curl -s -H \"Authorization: Bearer $HA_TOKEN\" http://homeassistant.local:8123/api/states/sensor.esphome_web_757cb4_zimmer_temperatur | jq -r '.state | tonumber | (. * 10 | round) / 10'",
         "interval": 60,
-        "format": " 󰽔 {}",
-        "tooltip": false
-    },
-    "custom/qr_left": {
-        "format": " ",
+        "format": " 󰽔 {}  ",
         "tooltip": false
     },
 
@@ -65,13 +60,9 @@
     "tray": {
         "spacing": 8
     },
-    "custom/qr_right": {
-        "format": " ",
-        "tooltip": false
-    },
     "custom/notification": {
         "tooltip": false,
-        "format": "",
+        "format": "  ",
         "on-click": "makoctl dismiss -a", // Alle Notifications wegklicken
         "on-click-right": "makoctl restore" // Letzte Notification zurückholen
     },
@@ -88,5 +79,10 @@
         "format": "  ",
         "tooltip": false,
         "on-click": "rofi-bluetooth"    
+    },
+    "custom/wallpaper": {
+        "format": " 󱧾 ",
+        "tooltip": false,
+        "on-click": "~/dotfiles/scripts/random-wallpaper.sh"
     }
 }

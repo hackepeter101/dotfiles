@@ -16,6 +16,9 @@ configuration {
     muted: #595c61ff;
     accent: #e41148ff;
     warn: #ffd23fff;
+    foreground: @fg;
+    text: @fg;
+    background: @bg;
 }
 
 window {
@@ -60,7 +63,7 @@ listview {
 element {
     padding: 10px 12px;
     border: 0px;
-    background-color: transparent;
+    background-color: @background;
     text-color: @fg;
 }
 
@@ -75,7 +78,7 @@ element selected.urgent {
 }
 
 element alternate.normal {
-    background-color: transparent;
+    background-color: @background;
 }
 
 element-text {
