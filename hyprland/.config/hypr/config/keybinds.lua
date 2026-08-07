@@ -106,7 +106,7 @@ hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 
 -- Special workspace (scratchpad)
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd([[bash -c 'grim -g "$(slurp)" ~/Bilder/screenshot_$(date +"%Y-%m-%d_%H-%M-%S").png']]))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd([[bash -c 'grim -g "$(slurp)" - | tee ~/Pictures/screenshot_$(date +"%Y-%m-%d_%H-%M-%S").png | wl-copy']]))
 
 -----------------------
 ---- NOTIFICATIONS ----
