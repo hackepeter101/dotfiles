@@ -1,19 +1,19 @@
 * {
     /* Hardcore Terminal Vibe */
     font-family: "ttf-ibmplex-mono-nerd", "Maple Mono", monospace;
-    font-size: 13px;
+    font-size: 11px;
     border: none;
     border-radius: 0;
     padding: 0;
     margin: 0;
     box-shadow: none;
     min-height: 0;
+    min-width: 0;
 }
 
 window#waybar {
-    background-color: #050209; /* Tiefschwarz */
-    color: #FFFFFF;
-    border-bottom: 1px solid #595c61; /* Eine winzige, harte Trennlinie */
+    background: linear-gradient(90deg, #050209 0%, #0d0a16 100%);
+    color: #ffffff;
 }
 
 /* Abstand zwischen den Modulen */
@@ -26,13 +26,13 @@ window#waybar {
 
 /* --- Workspaces --- */
 #workspaces button {
-    color: #595c61; /* Inaktive Workspaces sind dunkelgrau */
+    color: #595c61;
     background: transparent;
     padding: 0 10px;
 }
 
 #workspaces button.active {
-    color: #ffd23f; 
+    color: #e4d81a;
     font-weight: bold;
 }
 
@@ -42,18 +42,52 @@ window#waybar {
 }
 
 .modules-left {
-    background-color: #e4d81a; /* Cyberpunk-Gelb */
-    color: #000000; /* Schwarze Schrift für alle linken Module */
+    background-color: #e4d81a;
+    color: #050209;
+}
+
+.modules-center,
+.modules-right {
+    background-color: rgba(5, 2, 9, 0.88);
+}
+
+#tray,
+#clock,
+#custom-notification {
+    padding: 0 6px;
+    margin: 0 1px;
+    background: #0d0a16;
+    min-height: 0;
+}
+
+#clock {
+    color: #ffffff;
+}
+
+#tray:hover,
+#clock:hover,
+#custom-notification:hover {
+    color: #e41148;
+}
+
+#custom-notification {
+    color: #e4d81a;
+}
+
+#custom-notification label {
+    font-size: 11px;
+    padding: 0;
+    margin: 0;
+}
+
+#custom-notification.dnd,
+#custom-notification.inhibited {
+    color: #c9032f;
 }
 
 /* --- Kritische Werte (Rot) --- */
 #memory.warning,
 #cpu.warning,
 #temperature.critical {
-    color: #c9032f;
-}
-
-/* --- Muted Audio (Gelb) --- */
-#pulseaudio.muted {
     color: #c9032f;
 }

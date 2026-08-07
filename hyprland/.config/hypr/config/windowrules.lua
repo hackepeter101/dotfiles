@@ -74,13 +74,15 @@ hl.window_rule({ match = { class = "^(firefox|zen)$" }, opacity = "1.0 override"
 hl.window_rule({ match = { class = terminals }, opacity = "1.0 override" }) -- override opacity in favor of terminal settings for opacity
 hl.window_rule({ match = { class = "^(mpv|org.kde.haruna|.*plex.*|org\\.kde\\.gwenview|.*vlc.*)$" }, opacity = "1.0 override" })
 
--- Float Utility Windows
 local floatApps = {
     { class = "^(kvantummanager|qt[56]ct|nwg-look)$" },
-    { class = "^(org.pulseaudio.pavucontrol|blueman-manager|nm-applet|nm-connection-editor)$" },
+    { class = "^(org.pulseaudio.pavucontrol|pavucontrol|blueman-manager|nm-applet|nm-connection-editor)$" },
     { title = "^(Winetricks.*|Protontricks.*)$" },
 }
-for _, m in ipairs(floatApps) do hl.window_rule({ match = m, float = true }) end
+
+for _, m in ipairs(floatApps) do 
+    hl.window_rule({ match = m, float = true, center = true }) 
+end
 
 hl.window_rule({ match = { float = true }, move = "50% 50%" })
 
