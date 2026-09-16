@@ -5,16 +5,16 @@
     // --- Layout ---
     "modules-left": [
         "cpu",
-        "memory",
-        "temperature",
-        "custom/Zimmertemperatur-sensor"
+        "memory"
     ],
     "modules-center": [
         "mpris",
         "hyprland/workspaces"
     ],
     "modules-right": [
-        "tray",
+        "pulseaudio",
+        "network",
+        "bluetooth",
         "clock",
         "custom/notification"
     ],
@@ -27,17 +27,6 @@
         "format": "RAM {percentage:2}%",
         "interval": 2
     },
-    "temperature": {
-        "format": "TMP {temperatureC}°C",
-        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input" // Ggf. anpassen, falls er nichts anzeigt
-    },
-    "custom/Zimmertemperatur-sensor": {
-    "exec": "source ~/.config/waybar/secrets.sh && curl -s -H \"Authorization: Bearer $HA_TOKEN\" http://homeassistant.local:8123/api/states/sensor.esphome_web_757cb4_zimmer_temperatur | jq -r '.state | tonumber | (. * 10 | round) / 10'",
-        "interval": 60,
-        "format": " 󰽔 {}  ",
-        "tooltip": false
-    },
-
     // --- Module Mitte ---
     "mpris": {
         "format": "{status_icon} {title} - {artist}",
@@ -49,13 +38,52 @@
     },
     "hyprland/workspaces": {
         "all-outputs": false, // Zeigt Workspaces NUR auf dem Bildschirm, wo sie auch sind
-        "format": "[{name}]", // Eckige Klammern für den Terminal-Look
-        "on-click": "activate",
+        "format": "{name} {windows}",
+        "window-rewrite-default": "<span color='#c34b22'></span>",
+        "window-rewrite": {
+            "title<.*[Yy][Oo][Uu][Tt][Uu][Bb][Ee].*>": "<span color='#c32626'></span>",
+            "class<brave-origin|brave-browser|firefox|zen> title<^(?!.*[Yy][Oo][Uu][Tt][Uu][Bb][Ee]).*$>": "<span color='#dda73c'>󰖟</span>",
+            "class<kitty|ghostty|Alacritty|gnome-terminal|konsole>": "<span color='#d4e052'></span>",
+            "class<code|codium|vscodium>": "<span color='#81a1c1'>󰨞</span>",
+            "class<nemo|org.gnome.Nautilus|org.kde.dolphin|thunar|pcmanfm>": "<span color='#a6e467'>󰉋</span>",
+            "class<org.kicad.kicad|kicad> title<.*[Ss]chematic.*>": "<span color='#a6e052'></span>",
+            "class<org.kicad.kicad|kicad> title<.*[Pp][Cc][Bb].*>": "<span color='#c4e052'></span>",
+            "class<org.kicad.kicad|kicad> title<.*([3Tt][Dd]|[Vv]iewer).*>": "<span color='#d9b43c'></span>",
+            "class<org.kicad.kicad|kicad>": "<span color='#a6e467'></span>",
+            "class<org.gnome.Calculator|gnome-calculator>": "<span color='#981b1b'></span>"
+        },
+        "format-window-separator": " ",
+        "move-to-monitor": true,
         "disable-scroll": true
     },
     // --- Module Rechts ---
-    "tray": {
-        "spacing": 8
+    "network": {
+        "format-ethernet": "󰈀 {ifname}",
+        "format-wifi": "󰖩 {essid}",
+        "format-linked": "󰈀 {ifname}",
+        "format-disconnected": "󰤮 offline",
+        "tooltip-format-ethernet": "{ifname}: {ipaddr}",
+        "tooltip-format-wifi": "{essid}: {ipaddr}",
+        "on-click": "nm-connection-editor"
+    },
+    "bluetooth": {
+        "format": "󰂯 {status}",
+        "format-disabled": "󰂲 off",
+        "format-off": "󰂲 off",
+        "format-on": "󰂯 ready",
+        "format-connected": "󰂯 connected",
+        "format-no-controller": "󰂲 unavailable",
+        "on-click": "blueman-manager"
+    },
+    "pulseaudio": {
+        "format": "󰕾 {volume}%",
+        "format-muted": "󰖁 muted",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "tooltip-format": "{desc}: {volume}%"
     },
     "clock": {
         "format": "{:%H:%M:%S}", // Mit Sekunden für den aktiven "Live"-Vibe

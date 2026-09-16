@@ -1,22 +1,25 @@
-# My cyberpunk styled dotfiles for arch/cachy
+# Dark Arasaka dotfiles for Arch/CachyOS
 
 ## Colors:
 
+- background: #050209
+- text: #c4ede9
+- accent: #e41148
+- deep red: #c9032f
+- muted: #595c61
+- warning: #ffd23f
 
-amaranth = #c9032f
-black = #050209
-frozen-water = #04f2f5
-charcoal = #595c61
-golden-pollen = #e4d81a
+The active palette is defined in `hyprland/.config/hypr/config/colors.lua` and
+is reused by the GTK, Rofi, Kitty, SwayNC, Waybar, and Hyprland layers.
 
+Configuration roots:
 
-bg-base = black
-text-main = frozen-water 
-accent-primary = amaranth
-border-color = charcoal
-warning-color = golden-pollen
+- `hyprland/.config/hypr`: compositor, monitors, workspaces, and window rules
+- `gtk/.config`: GTK 3/4 settings and CSS
+- `waybar/.config/waybar`: status bar configuration
+- `rofi/.config/rofi`: application launcher configuration
+- `swaync/.config/swaync`: notification center configuration
+- `kitty/.config/kitty`: terminal configuration
 
-#e4d81a
-#c9032f
-#04f2f5
-#010101
+User configuration is deployed manually from these repository directories.
+SDDM files are kept separate because they install under system paths.

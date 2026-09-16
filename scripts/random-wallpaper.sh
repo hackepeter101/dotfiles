@@ -10,7 +10,7 @@ n=${#files[@]}
 if [ "$n" -gt 0 ]; then
     random_index=$((RANDOM % n))
     random_file="${files[$random_index]}"
-    awww img "$random_file"
+    awww img --transition-type none "$random_file"
     echo "Selected random file: $random_file"
 else
     echo "No files found."

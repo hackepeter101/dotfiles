@@ -1,18 +1,18 @@
 @define-color cc-bg #050209;
 @define-color noti-border-color #595c61;
-@define-color noti-bg #0d0a16;
+@define-color noti-bg #050209;
 @define-color noti-bg-darker #050209;
-@define-color noti-bg-hover #0d0a16;
+@define-color noti-bg-hover #050209;
 @define-color noti-bg-focus #050209;
-@define-color noti-close-bg #c9032f;
+@define-color noti-close-bg #e41148;
 @define-color noti-close-bg-hover #e41148;
-@define-color text-color #ffffff;
+@define-color text-color #c4ede9;
 @define-color text-color-disabled #595c61;
-@define-color bg-selected #e4d81a;
+@define-color bg-selected #e41148;
 @define-color border-green #595c61;
-@define-color red-base #c9032f;
+@define-color red-base #e41148;
 @define-color red-hover #e41148;
-@define-color green-base #e4d81a;
+@define-color green-base #c4ede9;
 @define-color blue-base #c4ede9;
 
 * {
@@ -32,6 +32,17 @@
   padding: 0;
 }
 
+.notification:hover {
+  background: @noti-border-color;
+  color: @cc-bg;
+}
+
+.notification:hover .summary,
+.notification:hover .time,
+.notification:hover .body {
+  color: @cc-bg;
+}
+
 .notification,
 .notification-content,
 .notification-action,
@@ -45,33 +56,27 @@
 .widget-dnd>switch slider,
 .widget-label>label,
 .widget-buttons-grid,
-.widget-buttons-grid>flowbox>flowboxchild>button,
-.widget-volume,
-.widget-backlight,
-.widget-mpris,
-.widget-mpris>box>button,
-.widget-mpris-player,
-.widget-mpris-album-art {
+.widget-buttons-grid>flowbox>flowboxchild>button {
   border-radius: 0;
 }
 
 .notification {
-  background: linear-gradient(180deg, #0d0a16 0%, #050209 100%);
+  background: @noti-bg;
   border: 1px solid @green-base;
   margin: 4px 0;
   padding: 2px;
-  box-shadow: 0 0 0 1px rgba(228, 216, 26, 0.12), 0 0 18px rgba(228, 216, 26, 0.08);
+  box-shadow: none;
 }
 
 .notification.low,
 .notification.normal {
   border-color: @green-base;
-  box-shadow: 0 0 0 1px rgba(228, 216, 26, 0.12), 0 0 18px rgba(228, 216, 26, 0.08);
+  box-shadow: none;
 }
 
 .notification.critical {
   border-color: @red-base;
-  box-shadow: 0 0 0 1px rgba(201, 3, 47, 0.28), 0 0 18px rgba(201, 3, 47, 0.16);
+  box-shadow: none;
 }
 
 .notification.critical .summary,
@@ -95,7 +100,7 @@
   transition: opacity 0.2s ease-in-out;
   border-radius: 0;
   border: none;
-  box-shadow: 0 0 0 1px rgba(201, 3, 47, 0.35);
+  box-shadow: none;
 }
 
 .notification:hover .close-button {
@@ -179,9 +184,9 @@
 }
 
 .control-center {
-  background: linear-gradient(180deg, #0d0a16 0%, #050209 100%);
+  background: @cc-bg;
   border: 1px solid @noti-border-color;
-  box-shadow: 0 0 0 1px rgba(196, 237, 233, 0.08), 0 0 24px rgba(201, 3, 47, 0.08);
+  box-shadow: none;
 }
 
 .widget-title {
@@ -251,7 +256,7 @@
 .widget-buttons-grid>flowbox>flowboxchild>button:hover {
   background: @red-base;
   color: @cc-bg;
-  box-shadow: 0 0 0 1px rgba(201, 3, 47, 0.5);
+  box-shadow: none;
 }
 
 .widget-buttons-grid>flowbox>flowboxchild>button:checked {
@@ -259,34 +264,6 @@
   color: @cc-bg;
 }
 
-.widget-volume,
-.widget-backlight {
-  background: @noti-bg-darker;
-  padding: 5px;
-  margin: 5px 10px;
-  font-size: 2rem;
-  color: @green-base;
-}
-
-.widget-mpris {
-  color: @text-color;
-  background: @noti-bg-darker;
-  margin: 0px 10px 10px 10px;
-  box-shadow: none;
-  border: 1px solid @noti-border-color;
-}
-
-.widget-mpris>box>button,
-.widget-mpris-player,
-.widget-mpris-album-art {
-  border-radius: 0;
-  box-shadow: none;
-  margin: 10px;
-}
-
-picture.mpris-background {
-  opacity: 0.05;
-}
 
 .notification-action>button {
   color: @text-color;

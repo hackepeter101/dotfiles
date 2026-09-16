@@ -1,0 +1,21 @@
+:root {
+  --accent-bg-color: #c4ede9;
+  --accent-fg-color: #050209;
+  --destructive-color: #c9032f;
+}
+
+selection {
+  background-color: #c4ede9;
+  color: #050209;
+}
+
+button.suggested-action,
+button:checked {
+  background-color: #c4ede9;
+  color: #050209;
+}
+
+button.destructive-action {
+  background-color: #c9032f;
+  color: #050209;
+}

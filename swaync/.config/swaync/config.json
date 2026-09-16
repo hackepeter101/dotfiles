@@ -25,28 +25,16 @@
   "text-empty": "No Notification",
   "scripts": {
     "sound-script": {
-      "exec": "paplay ~/.config/swaync/notification.ogg",
+      "exec": "paplay --volume=16384 ~/.config/swaync/notification-message.oga",
       "app-name": ".*"
     }
   },
-  "widgets": ["title", "buttons-grid", "volume", "backlight", "mpris"],
+  "widgets": ["title", "buttons-grid"],
   "widget-config": {
     "title": {
       "text": "Notifications",
       "clear-all-button": true,
       "button-text": "Clear All"
-    },
-    "mpris": {
-      "blacklist": ["playerctl"],
-      "autohide": false,
-      "show-album-art": "always",
-      "loop-carousel": false
-    },
-    "volume": {
-      "label": "󰕾"
-    },
-    "backlight": {
-      "label": "󰃟"
     },
     "buttons-grid": {
       "actions": [
@@ -61,11 +49,6 @@
         {
           "label": "󰆴",
           "command": "swaync-client -C"
-        },
-        {
-          "label": "󰕾",
-          "command": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-          "type": "toggle"
         },
         {
           "label": "󱧾",

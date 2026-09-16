@@ -1,0 +1,19 @@
+@define-color accent #c4ede9;
+@define-color accent-foreground #050209;
+@define-color destructive #c9032f;
+
+selection {
+  background-color: @accent;
+  color: @accent-foreground;
+}
+
+button.suggested-action,
+button:checked {
+  background-color: @accent;
+  color: @accent-foreground;
+}
+
+button.destructive-action {
+  background-color: @destructive;
+  color: @accent-foreground;
+}

@@ -1,9 +1,9 @@
 configuration {
     modes: [ drun, run, window ];
     terminal: "kitty";
-    font: "Maple Mono 12";
+    font: "Maple Mono 11";
     location: 0;
-    lines: 10;
+    lines: 8;
     show-icons: true;
     fixed-num-lines: true;
     case-sensitive: false;
@@ -15,27 +15,27 @@ configuration {
     fg: #c4ede9ff;
     muted: #595c61ff;
     accent: #e41148ff;
-    warn: #ffd23fff;
     foreground: @fg;
     text: @fg;
     background: @bg;
 }
 
 window {
-    padding: 16px;
+    width: 38%;
+    padding: 12px;
     background-color: @bg;
     border: 1px;
-    border-color: @muted;
+    border-color: @accent;
 }
 
 mainbox {
-    spacing: 12px;
+    spacing: 8px;
     padding: 0px;
 }
 
 inputbar {
-    padding: 10px 12px;
-    spacing: 8px;
+    padding: 8px 10px;
+    spacing: 6px;
     background-color: @panel;
     text-color: @fg;
     children: [ prompt, entry ];
@@ -54,14 +54,14 @@ entry {
 
 listview {
     padding: 0px;
-    spacing: 4px;
+    spacing: 2px;
     fixed-height: false;
     scrollbar: false;
     background-color: transparent;
 }
 
 element {
-    padding: 10px 12px;
+    padding: 8px 10px;
     border: 0px;
     background-color: @background;
     text-color: @fg;
@@ -72,8 +72,9 @@ element selected.normal {
     text-color: @bg;
 }
 
-element selected.urgent {
-    background-color: @warn;
+element selected.urgent,
+element urgent {
+    background-color: @accent;
     text-color: @bg;
 }
 
@@ -90,11 +91,11 @@ element-icon {
 }
 
 message {
-    padding: 10px 12px;
+    padding: 8px 10px;
     background-color: @panel;
     border: 1px;
     border-color: @muted;
-    text-color: @warn;
+    text-color: @muted;
 }
 
 textbox {

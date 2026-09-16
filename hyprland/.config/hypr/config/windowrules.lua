@@ -48,9 +48,38 @@ hl.window_rule({
 
 -- Apps
 local primaryWorkspace = 1
+local schematicWorkspace = 2
+local pcbWorkspace = 3
+local viewerWorkspace = 4
+local referenceBrowserWorkspace = 10
+local referenceCalculatorWorkspace = 7
+local kicadClass = "^(kicad|org\\.kicad\\.kicad)$"
 
-hl.window_rule({ match = { class = "^(.*\\.exe)$", float = true }, primaryWorkspace, center = true, fullscreen_state = 0 })
-hl.window_rule({ match = { class = "^(vesktop|discord)$" }, primaryWorkspace })
+-- KiCad application routing. Keep title-specific rules ahead of the broad class fallback.
+hl.window_rule({ match = { class = kicadClass, title = "^(Schematic Editor|.*Schematic Editor.*)$" }, workspace = schematicWorkspace })
+hl.window_rule({ match = { class = kicadClass, title = "^(PCB Editor|.*PCB Editor.*)$" }, workspace = pcbWorkspace })
+hl.window_rule({ match = { class = kicadClass, title = "^(3D Viewer|.*3D Viewer.*)$" }, workspace = viewerWorkspace })
+hl.window_rule({ match = { class = kicadClass, title = "^(KiCad|.*Project Manager.*|.*Project.*Manager.*)$" }, workspace = primaryWorkspace })
+hl.window_rule({
+    match = {
+        class = kicadClass,
+        title = "^(Choose|Open|Save|Footprint|Symbol|Library|Properties|Page Settings|Plot|Board Setup|Preferences).*$",
+    },
+    float  = true,
+    center = true,
+})
+
+-- Reference tools stay on the secondary monitor's workspace range when present.
+hl.window_rule({ match = { class = "^(brave-origin|brave-browser|firefox|zen)$" }, workspace = referenceBrowserWorkspace })
+hl.window_rule({
+    match     = { class = "^(gnome-calculator|org\\.gnome\\.Calculator)$" },
+    workspace = referenceCalculatorWorkspace,
+    float     = true,
+    center    = true,
+})
+
+hl.window_rule({ match = { class = "^(.*\\.exe)$" }, float = true, workspace = primaryWorkspace, center = true, fullscreen_state = 0 })
+hl.window_rule({ match = { class = "^(vesktop|discord)$" }, workspace = primaryWorkspace })
 hl.window_rule({ match = { class = "^(.*[Cc]alculator.*)$" }, float = true, size = "380 616" })
 hl.window_rule({ match = { class = "^(org.kde.keditfiletype)$" }, float = true })
 hl.window_rule({ match = { class = "^(org.kde.ark)$" }, size = "(monitor_w*0.40) (monitor_h*0.40)" })
@@ -84,7 +113,7 @@ for _, m in ipairs(floatApps) do
     hl.window_rule({ match = m, float = true, center = true }) 
 end
 
-hl.window_rule({ match = { float = true }, move = "50% 50%" })
+hl.window_rule({ match = { float = true }, move = "50% 50%", border_color = frozenWater })
 
 -- Float Common Modals
 local modalMatches = {

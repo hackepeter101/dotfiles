@@ -4,13 +4,13 @@ hl.config({
     general = {
         gaps_in = 3,
         gaps_out = 8,
-        border_size = 2,
+        border_size = 1,
         extend_border_grab_area = 10,
         resize_on_border = true,
         col = {
             active_border = {
-                colors = { green, frozenWater },
-                angle = 45,
+                colors = { charcoal, frozenWater },
+                angle = 90,
             },
             inactive_border = charcoal,
         },
@@ -19,12 +19,12 @@ hl.config({
         col = {
             border_active = frozenWater,
             border_inactive = charcoal,
-            border_locked_active = amaranth,
+            border_locked_active = darkRed,
             border_locked_inactive = charcoal,
         },
         groupbar = {
             col = {
-                active = green,
+                active = frozenWater,
                 inactive = charcoal,
                 locked_active = goldenPollen,
                 locked_inactive = charcoal,
@@ -33,7 +33,7 @@ hl.config({
     },
     decoration = {
         dim_special = 0.3,
-        rounding = 10,
+        rounding = 0,
         active_opacity = 0.95,
         inactive_opacity = 0.85,
         fullscreen_opacity = 1,

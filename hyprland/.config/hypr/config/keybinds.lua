@@ -80,7 +80,7 @@ hl.bind("Print",               hl.dsp.exec_cmd([[grim -g "$(slurp)" - | swappy -
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd([[grim -g "$(hyprctl activewindow -j | jq -r '\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])')" - | swappy -f -]]))
 hl.bind(mainMod .. " + R",     hl.dsp.exec_cmd([[killall -SIGUSR1 wl-screenrec || wl-screenrec -f ~/Videos/recording_$(date +%Y%m%d_%H%M%S).mp4]]))
 
-hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("swaync-client -t -sw"))
+hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("swaync-client -t -sw"))
 
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd([[bash -c "cliphist list | rofi -dmenu | cliphist decode | wl-copy"]]))
 
@@ -107,8 +107,5 @@ hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 
 -- Special workspace (scratchpad)
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd([[bash -c 'grim -g "$(slurp)" - | tee ~/Pictures/screenshot_$(date +"%Y-%m-%d_%H-%M-%S").png | wl-copy']]))
-
------------------------
----- NOTIFICATIONS ----
 -----------------------
 
