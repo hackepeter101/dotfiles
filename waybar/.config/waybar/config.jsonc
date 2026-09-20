@@ -5,7 +5,9 @@
     // --- Layout ---
     "modules-left": [
         "cpu",
-        "memory"
+        "memory",
+        "custom/updates",
+        "cava"
     ],
     "modules-center": [
         "mpris",
@@ -38,6 +40,7 @@
     },
     "hyprland/workspaces": {
         "all-outputs": false, // Zeigt Workspaces NUR auf dem Bildschirm, wo sie auch sind
+        "on-click": "activate",
         "format": "{name} {windows}",
         "window-rewrite-default": "<span color='#c34b22'></span>",
         "window-rewrite": {
@@ -50,7 +53,13 @@
             "class<org.kicad.kicad|kicad> title<.*[Pp][Cc][Bb].*>": "<span color='#c4e052'></span>",
             "class<org.kicad.kicad|kicad> title<.*([3Tt][Dd]|[Vv]iewer).*>": "<span color='#d9b43c'></span>",
             "class<org.kicad.kicad|kicad>": "<span color='#a6e467'></span>",
-            "class<org.gnome.Calculator|gnome-calculator>": "<span color='#981b1b'></span>"
+            "class<org.gnome.Calculator|gnome-calculator>": "<span color='#981b1b'></span>",
+            "class<steam|steamwebhelper|steamwebhelper-renderer>": "<span color='#81a1c1'></span>",
+            "class<org.gimp.GIMP|gimp>": "<span color='#c32626'></span>",
+            "class<blender>": "<span color='#ea7600'>󰂫</span>",
+            "class<Minecraft.*>": "<span color='#4caf50'>󰍳</span>",
+            "class<bambu-studio|orca-slicer>": "<span color='#00ae42'>󰆧</span>",
+            "class<thunderbird|org.mozilla.Thunderbird>": "<span color='#00a2e8'></span>"
         },
         "format-window-separator": " ",
         "move-to-monitor": true,
@@ -79,7 +88,11 @@
         "format": "󰕾 {volume}%",
         "format-muted": "󰖁 muted",
         "format-icons": {
-            "default": ["󰕿", "󰖀", "󰕾"]
+            "default": [
+                "󰕿",
+                "󰖀",
+                "󰕾"
+            ]
         },
         "on-click": "pavucontrol",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
@@ -108,5 +121,33 @@
         "on-click": "swaync-client -t -sw",
         "on-click-right": "swaync-client -d -sw",
         "escape": true
+    },
+    "cava": {
+        "cava_config": "$XDG_CONFIG_HOME/cava/cava.conf",
+        "framerate": 30,
+        "autosens": 1,
+        //"sensitivity": 100,
+        "bars": 14,
+        "lower_cutoff_freq": 50,
+        "higher_cutoff_freq": 10000,
+        "method": "pulse",
+        "source": "auto",
+        "stereo": true,
+        "reverse": false,
+        "monstercat": false,
+        "waves": false,
+        "noise_reduction": 0.77,
+        "input_delay": 2,
+        "format-icons" : ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" ],
+        "actions": {
+            "on-click-right": "mode"
+        }
+    },
+    "custom/updates": {
+        "format": "󰮯 {}",
+        "exec": "yay -Qu | wc -l",
+        "interval": 3600,
+        "on-click": "kitty -e yay -Syu",
+        "tooltip": false
     }
 }
