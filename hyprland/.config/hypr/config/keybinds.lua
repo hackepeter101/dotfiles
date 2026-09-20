@@ -105,6 +105,10 @@ hl.bind(mainMod .. " + CONTROL + ALT + Left",  hl.dsp.window.move({ workspace = 
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 
+-- Move workspace to next/previous monitor
+hl.bind(mainMod .. " + M", hl.dsp.workspace.move({ monitor = "+1" }))
+hl.bind(mainMod .. " + SHIFT + M", hl.dsp.workspace.move({ monitor = "-1" }))
+
 -- Special workspace (scratchpad)
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd([[bash -c 'grim -g "$(slurp)" - | tee ~/Pictures/screenshot_$(date +"%Y-%m-%d_%H-%M-%S").png | wl-copy']]))
 -----------------------
