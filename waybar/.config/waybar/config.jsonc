@@ -144,8 +144,8 @@
         }
     },
     "custom/updates": {
-        "format": "󰮯 {}",
-        "exec": "yay -Qu | wc -l",
+        "format": "{}",
+        "exec": "count=$(yay -Qu | wc -l); if [ \"$count\" -gt 0 ]; then echo \"<span foreground='yellow'>󰮯</span> $count\"; else echo \"󰮯 0\"; fi",
         "interval": 3600,
         "on-click": "kitty -e yay -Syu",
         "tooltip": false
