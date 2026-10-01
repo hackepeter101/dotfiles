@@ -28,11 +28,14 @@ if [[ "$EUID" -eq 0 ]]; then
     fi
 
     if [[ -n "$invoking_uid" && "$invoking_uid" != 0 ]]; then
+        TARGET_USER="$(getent passwd "$invoking_uid" | cut -d: -f1)"
         TARGET_HOME="$(getent passwd "$invoking_uid" | cut -d: -f6)"
     else
+        TARGET_USER="root"
         TARGET_HOME="$HOME"
     fi
 else
+    TARGET_USER="$(id -un)"
     TARGET_HOME="$HOME"
 fi
 
@@ -42,6 +45,7 @@ if [[ -z "$TARGET_HOME" ]]; then
     exit 1
 fi
 
+readonly TARGET_USER
 readonly TARGET_HOME
 readonly CONFIG_HOME="$TARGET_HOME/.config"
 readonly DEFAULT_REPOSITORY_DIR="$TARGET_HOME/dotfiles"
@@ -201,15 +205,37 @@ install_sddm() {
         exit 1
     }
 
-    # The repository contains only the Cyberpunk overlay for SilentSDDM. The
-    # base theme must be installed separately so SDDM has Main.qml, metadata,
-    # and its QML components before this overlay selects the theme.
+    # The repository contains only the Cyberpunk overlay for SilentSDDM. If
+    # the base theme is missing, install it through the invoking user's AUR
+    # helper rather than trying to run an AUR helper as root.
     if [[ ! -f "$theme_root/Main.qml" ||
           ! -f "$theme_root/metadata.desktop" ||
           ! -d "$theme_root/components" ]]; then
-        printf '%s\n' 'Error: the SilentSDDM base theme is missing.' >&2
-        printf '%s\n' 'Install it first with: sudo pacman -S sddm-silent-theme' >&2
-        exit 1
+        local aur_helper=''
+
+        if command -v yay >/dev/null 2>&1; then
+            aur_helper='yay'
+        elif command -v paru >/dev/null 2>&1; then
+            aur_helper='paru'
+        fi
+
+        if [[ "$TARGET_USER" == root || -z "$TARGET_USER" || -z "$TARGET_HOME" || -z "$aur_helper" ]]; then
+            printf '%s\n' 'Error: the SilentSDDM base theme is missing.' >&2
+            printf '%s\n' 'Run `yay -S sddm-silent-theme` or `paru -S sddm-silent-theme` as your normal user.' >&2
+            exit 1
+        fi
+
+        log "Installing SilentSDDM through $aur_helper as $TARGET_USER"
+        run sudo -u "$TARGET_USER" env HOME="$TARGET_HOME" "$aur_helper" -S --needed sddm-silent-theme
+
+        if "$DRY_RUN"; then
+            log 'Dry run: skipping SilentSDDM file verification'
+        elif [[ ! -f "$theme_root/Main.qml" ||
+                ! -f "$theme_root/metadata.desktop" ||
+                ! -d "$theme_root/components" ]]; then
+            printf '%s\n' 'Error: SilentSDDM installation did not provide the required theme files.' >&2
+            exit 1
+        fi
     fi
 
     # SDDM mirrors the target filesystem below the repository's sddm folder.
