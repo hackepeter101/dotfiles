@@ -9,29 +9,43 @@
 #
 # By default, only user configuration is installed. SDDM is installed only
 # when --with-sddm is passed because it writes to system-owned directories.
-# When this file is piped into Bash, the repository is cloned temporarily so
-# GNU Stow can still access the package directories beside this script.
+# When this file is piped into Bash, the repository is located in an existing
+# checkout or cloned to a persistent directory before GNU Stow runs.
 
 set -Eeuo pipefail
 
 readonly REPOSITORY_URL="https://github.com/hackepeter101/dotfiles.git"
 readonly INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/hackepeter101/dotfiles/master/install.sh"
 readonly CONFIG_HOME="$HOME/.config"
+readonly DEFAULT_REPOSITORY_DIR="$HOME/dotfiles"
 
 DRY_RUN=false
 WITH_SDDM=false
-TEMP_DIR=''
 SCRIPT_DIR=''
 
 setup_repository() {
     local script_path="${BASH_SOURCE[0]:-}"
 
     # With `curl URL/install.sh | bash`, Bash reads the script from stdin and
-    # there is no local directory containing the Stow packages. Clone a
-    # temporary checkout and remove it automatically when the script exits.
+    # there is no local directory containing the Stow packages. Prefer the
+    # conventional ~/dotfiles checkout so an existing repository is reused.
     if [[ -n "$script_path" && -f "$script_path" ]]; then
         SCRIPT_DIR="$(cd -- "$(dirname -- "$script_path")" && pwd)"
         return
+    fi
+
+    local repository_dir="${DOTFILES_DIR:-$DEFAULT_REPOSITORY_DIR}"
+
+    if [[ -d "$repository_dir/.git" ]]; then
+        SCRIPT_DIR="$(cd -- "$repository_dir" && pwd)"
+        log "Using existing dotfiles checkout at $SCRIPT_DIR"
+        return
+    fi
+
+    if [[ -e "$repository_dir" ]]; then
+        printf 'Error: %s exists but is not a Git checkout.\n' "$repository_dir" >&2
+        printf '%s\n' 'Set DOTFILES_DIR to a different directory or remove the conflicting path.' >&2
+        exit 1
     fi
 
     command -v git >/dev/null 2>&1 || {
@@ -39,11 +53,10 @@ setup_repository() {
         exit 1
     }
 
-    TEMP_DIR="$(mktemp -d)"
-    trap 'rm -rf -- "$TEMP_DIR"' EXIT
-    log "Cloning dotfiles into a temporary directory"
-    git clone --depth 1 "$REPOSITORY_URL" "$TEMP_DIR/dotfiles"
-    SCRIPT_DIR="$TEMP_DIR/dotfiles"
+    log "Cloning dotfiles into $repository_dir"
+    mkdir -p "$(dirname -- "$repository_dir")"
+    git clone --depth 1 "$REPOSITORY_URL" "$repository_dir"
+    SCRIPT_DIR="$(cd -- "$repository_dir" && pwd)"
 }
 
 usage() {
@@ -59,6 +72,9 @@ Options:
 
 Remote usage:
     curl -fsSL $INSTALL_SCRIPT_URL | bash -s -- --dry-run
+
+Piped installs use $DEFAULT_REPOSITORY_DIR, keeping the checkout beside the
+configuration files just like a normal local install.
 EOF
 }
 
