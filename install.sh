@@ -9,26 +9,56 @@
 #
 # By default, only user configuration is installed. SDDM is installed only
 # when --with-sddm is passed because it writes to system-owned directories.
+# When this file is piped into Bash, the repository is cloned temporarily so
+# GNU Stow can still access the package directories beside this script.
 
 set -Eeuo pipefail
 
-readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+readonly REPOSITORY_URL="https://github.com/hackepeter101/dotfiles.git"
+readonly INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/hackepeter101/dotfiles/master/install.sh"
 readonly CONFIG_HOME="$HOME/.config"
 
 DRY_RUN=false
 WITH_SDDM=false
+TEMP_DIR=''
+SCRIPT_DIR=''
+
+setup_repository() {
+    local script_path="${BASH_SOURCE[0]:-}"
+
+    # With `curl URL/install.sh | bash`, Bash reads the script from stdin and
+    # there is no local directory containing the Stow packages. Clone a
+    # temporary checkout and remove it automatically when the script exits.
+    if [[ -n "$script_path" && -f "$script_path" ]]; then
+        SCRIPT_DIR="$(cd -- "$(dirname -- "$script_path")" && pwd)"
+        return
+    fi
+
+    command -v git >/dev/null 2>&1 || {
+        printf '%s\n' 'Error: git is required when install.sh is piped into Bash.' >&2
+        exit 1
+    }
+
+    TEMP_DIR="$(mktemp -d)"
+    trap 'rm -rf -- "$TEMP_DIR"' EXIT
+    log "Cloning dotfiles into a temporary directory"
+    git clone --depth 1 "$REPOSITORY_URL" "$TEMP_DIR/dotfiles"
+    SCRIPT_DIR="$TEMP_DIR/dotfiles"
+}
 
 usage() {
     cat <<EOF
 Usage: $(basename "$0") [options]
 
-Install the user configuration from:
-  $SCRIPT_DIR
+Install the user configuration from this repository.
 
 Options:
   --dry-run       Show actions without changing files
   --with-sddm     Also install the SDDM configuration (requires root)
   -h, --help      Show this help text
+
+Remote usage:
+    curl -fsSL $INSTALL_SCRIPT_URL | bash -s -- --dry-run
 EOF
 }
 
@@ -161,6 +191,7 @@ parse_args() {
 
 main() {
     parse_args "$@"
+    setup_repository
 
     log "Installing user configuration into $CONFIG_HOME"
     install_user_configs
