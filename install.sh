@@ -20,10 +20,26 @@ readonly INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/hackepeter101/dot
 # When invoked as `sudo ./install.sh --with-sddm`, sudo changes the process
 # identity. Keep user configuration targeted at the user who invoked sudo,
 # while the SDDM section below still writes to system paths as root.
-if [[ "$EUID" -eq 0 && -n "${SUDO_USER:-}" ]]; then
-    TARGET_HOME="$(getent passwd "$SUDO_USER" | cut -d: -f6)"
+if [[ "$EUID" -eq 0 ]]; then
+    invoking_uid="${SUDO_UID:-}"
+    if [[ -z "$invoking_uid" ]]; then
+        invoking_user="${SUDO_USER:-$(logname 2>/dev/null || true)}"
+        invoking_uid="$(id -u "$invoking_user" 2>/dev/null || true)"
+    fi
+
+    if [[ -n "$invoking_uid" && "$invoking_uid" != 0 ]]; then
+        TARGET_HOME="$(getent passwd "$invoking_uid" | cut -d: -f6)"
+    else
+        TARGET_HOME="$HOME"
+    fi
 else
     TARGET_HOME="$HOME"
+fi
+
+if [[ -z "$TARGET_HOME" ]]; then
+    printf '%s\n' 'Error: could not determine the target user home directory.' >&2
+    printf '%s\n' 'Run the user install without sudo, or use sudo from a normal login shell.' >&2
+    exit 1
 fi
 
 readonly TARGET_HOME
