@@ -16,8 +16,19 @@ set -Eeuo pipefail
 
 readonly REPOSITORY_URL="https://github.com/hackepeter101/dotfiles.git"
 readonly INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/hackepeter101/dotfiles/master/install.sh"
-readonly CONFIG_HOME="$HOME/.config"
-readonly DEFAULT_REPOSITORY_DIR="$HOME/dotfiles"
+
+# When invoked as `sudo ./install.sh --with-sddm`, sudo changes the process
+# identity. Keep user configuration targeted at the user who invoked sudo,
+# while the SDDM section below still writes to system paths as root.
+if [[ "$EUID" -eq 0 && -n "${SUDO_USER:-}" ]]; then
+    TARGET_HOME="$(getent passwd "$SUDO_USER" | cut -d: -f6)"
+else
+    TARGET_HOME="$HOME"
+fi
+
+readonly TARGET_HOME
+readonly CONFIG_HOME="$TARGET_HOME/.config"
+readonly DEFAULT_REPOSITORY_DIR="$TARGET_HOME/dotfiles"
 
 DRY_RUN=false
 WITH_SDDM=false
@@ -152,9 +163,9 @@ install_user_configs() {
 
         prepare_package_conflicts "$package"
         if "$DRY_RUN"; then
-            run stow -n -v -d "$SCRIPT_DIR" -R -t "$HOME" "$package"
+            run stow -n -v -d "$SCRIPT_DIR" -R -t "$TARGET_HOME" "$package"
         else
-            run stow -d "$SCRIPT_DIR" -R -t "$HOME" "$package"
+            run stow -d "$SCRIPT_DIR" -R -t "$TARGET_HOME" "$package"
         fi
     done
 }
@@ -166,12 +177,24 @@ install_sddm() {
     fi
 
     local source="$SCRIPT_DIR/sddm"
+    local theme_root="/usr/share/sddm/themes/silent"
     local file destination
 
     [[ -d "$source" ]] || {
         printf '%s\n' 'Error: sddm directory is missing.' >&2
         exit 1
     }
+
+    # The repository contains only the Cyberpunk overlay for SilentSDDM. The
+    # base theme must be installed separately so SDDM has Main.qml, metadata,
+    # and its QML components before this overlay selects the theme.
+    if [[ ! -f "$theme_root/Main.qml" ||
+          ! -f "$theme_root/metadata.desktop" ||
+          ! -d "$theme_root/components" ]]; then
+        printf '%s\n' 'Error: the SilentSDDM base theme is missing.' >&2
+        printf '%s\n' 'Install it first with: sudo pacman -S sddm-silent-theme' >&2
+        exit 1
+    fi
 
     # SDDM mirrors the target filesystem below the repository's sddm folder.
     # install(1) creates parent directories and applies predictable modes.
