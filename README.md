@@ -21,5 +21,5 @@ Configuration roots:
 - `swaync/.config/swaync`: notification center configuration
 - `kitty/.config/kitty`: terminal configuration
 
-User configuration is deployed manually from these repository directories.
+There is install.sh file but i dont recomend runing it for now as it is made by ai...
 SDDM files are kept separate because they install under system paths.
