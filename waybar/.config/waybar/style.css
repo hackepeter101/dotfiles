@@ -65,6 +65,7 @@ window#waybar {
 #network,
 #bluetooth,
 #pulseaudio,
+#battery,
 #mpris,
 #custom-notification {
     color: #c4ede9;
@@ -83,6 +84,7 @@ window#waybar {
 #network,
 #bluetooth,
 #pulseaudio,
+#battery,
 #clock,
 #custom-notification {
     padding: 0 6px;
@@ -99,6 +101,7 @@ window#waybar {
 #network:hover,
 #bluetooth:hover,
 #pulseaudio:hover,
+#battery:hover,
 #clock:hover,
 #custom-notification:hover {
     color: #c4ede9;
@@ -113,6 +116,14 @@ window#waybar {
 
 #custom-notification {
     color: #c4ede9;
+}
+
+#battery.warning {
+    color: #ffd23f;
+}
+
+#battery.critical:not(.charging) {
+    color: #e41148;
 }
 
 #custom-notification.dnd,
