@@ -245,6 +245,25 @@ install_sddm() {
         run install -Dm644 "$file" "$destination"
         log "Installed $destination"
     done < <(find "$source" -type f -print0)
+
+    configure_sddm_theme
+}
+
+configure_sddm_theme() {
+    local metadata="/usr/share/sddm/themes/silent/metadata.desktop"
+
+    # SilentSDDM chooses one config through metadata.desktop. The package
+    # defaults to default.conf, so explicitly select this repository's custom
+    # Cyberpunk configuration after installing the overlay files.
+    if grep -q '^ConfigFile=' "$metadata"; then
+        run sed -i 's|^ConfigFile=.*|ConfigFile=configs/Cyberpunk.conf|' "$metadata"
+    elif grep -q '^# ConfigFile=configs/Cyberpunk.conf$' "$metadata"; then
+        run sed -i 's|^# ConfigFile=configs/Cyberpunk.conf$|ConfigFile=configs/Cyberpunk.conf|' "$metadata"
+    else
+        run sh -c 'printf "\nConfigFile=configs/Cyberpunk.conf\n" >> "$1"' sh "$metadata"
+    fi
+
+    log "Selected configs/Cyberpunk.conf for SilentSDDM"
 }
 
 parse_args() {
