@@ -3,7 +3,10 @@
 hl.config({
     input = {
         accel_profile = "flat",
-	kb_layout = "de",
+        kb_layout = "de",
+        touchpad = {
+            natural_scroll = true,
+        },
     },
 })
 
