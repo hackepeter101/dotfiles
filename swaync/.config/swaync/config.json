@@ -52,7 +52,7 @@
         },
         {
           "label": "󱧾",
-          "command": "~/dotfiles/scripts/random-wallpaper.sh"
+          "command": "~/dotfiles/scripts/next-wallpaper.sh"
         },
         {
           "label": "󰂯",
