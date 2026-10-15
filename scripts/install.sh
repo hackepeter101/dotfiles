@@ -7,7 +7,8 @@
 # the user's home directory so changes remain version-controlled here and are
 # immediately visible to the applications using them.
 #
-# By default, only user configuration is installed. SDDM is installed only
+# By default, the required packages and the user configuration are installed.
+# SDDM is installed only
 # when --with-sddm is passed because it writes to system-owned directories.
 # When this file is piped into Bash, the repository is located in an existing
 # checkout or cloned to a persistent directory before GNU Stow runs.
@@ -15,7 +16,7 @@
 set -Eeuo pipefail
 
 readonly REPOSITORY_URL="https://github.com/hackepeter101/dotfiles.git"
-readonly INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/hackepeter101/dotfiles/master/install.sh"
+readonly INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/hackepeter101/dotfiles/master/scripts/install.sh"
 
 # When invoked as `sudo ./install.sh --with-sddm`, sudo changes the process
 # identity. Keep user configuration targeted at the user who invoked sudo,
@@ -52,7 +53,7 @@ readonly DEFAULT_REPOSITORY_DIR="$TARGET_HOME/dotfiles"
 
 DRY_RUN=false
 WITH_SDDM=false
-SCRIPT_DIR=''
+REPOSITORY_DIR=''
 
 setup_repository() {
     local script_path="${BASH_SOURCE[0]:-}"
@@ -60,16 +61,17 @@ setup_repository() {
     # With `curl URL/install.sh | bash`, Bash reads the script from stdin and
     # there is no local directory containing the Stow packages. Prefer the
     # conventional ~/dotfiles checkout so an existing repository is reused.
+    # A local copy lives in scripts/, one level below the repository root.
     if [[ -n "$script_path" && -f "$script_path" ]]; then
-        SCRIPT_DIR="$(cd -- "$(dirname -- "$script_path")" && pwd)"
+        REPOSITORY_DIR="$(cd -- "$(dirname -- "$script_path")/.." && pwd)"
         return
     fi
 
     local repository_dir="${DOTFILES_DIR:-$DEFAULT_REPOSITORY_DIR}"
 
     if [[ -d "$repository_dir/.git" ]]; then
-        SCRIPT_DIR="$(cd -- "$repository_dir" && pwd)"
-        log "Using existing dotfiles checkout at $SCRIPT_DIR"
+        REPOSITORY_DIR="$(cd -- "$repository_dir" && pwd)"
+        log "Using existing dotfiles checkout at $REPOSITORY_DIR"
         return
     fi
 
@@ -87,7 +89,7 @@ setup_repository() {
     log "Cloning dotfiles into $repository_dir"
     mkdir -p "$(dirname -- "$repository_dir")"
     git clone --depth 1 "$REPOSITORY_URL" "$repository_dir"
-    SCRIPT_DIR="$(cd -- "$repository_dir" && pwd)"
+    REPOSITORY_DIR="$(cd -- "$repository_dir" && pwd)"
 }
 
 usage() {
@@ -144,7 +146,7 @@ prepare_package_conflicts() {
     local package="$1"
     local source config_entry destination
 
-    for source in "$SCRIPT_DIR/$package/.config"/*; do
+    for source in "$REPOSITORY_DIR/$package/.config"/*; do
         [[ -e "$source" || -L "$source" ]] || continue
         config_entry="$(basename -- "$source")"
         destination="$CONFIG_HOME/$config_entry"
@@ -158,6 +160,24 @@ prepare_package_conflicts() {
             backup_config_dir "$destination"
         fi
     done
+}
+
+install_packages() {
+    # Programs started by the configuration that are not pulled in by any
+    # other package. --needed keeps repeated installs from reinstalling them.
+    local packages=(kdeconnect)
+    local privilege=()
+
+    command -v pacman >/dev/null 2>&1 || {
+        printf '%s\n' 'Warning: pacman not found; skipping package installation' >&2
+        return
+    }
+
+    if [[ "$EUID" -ne 0 ]]; then
+        privilege=(sudo)
+    fi
+
+    run "${privilege[@]}" pacman -S --needed --noconfirm "${packages[@]}"
 }
 
 install_user_configs() {
@@ -176,16 +196,16 @@ install_user_configs() {
     run mkdir -p "$CONFIG_HOME"
 
     for package in "${packages[@]}"; do
-        if [[ ! -d "$SCRIPT_DIR/$package/.config" ]]; then
+        if [[ ! -d "$REPOSITORY_DIR/$package/.config" ]]; then
             printf 'Warning: skipping %s; no .config directory found\n' "$package" >&2
             continue
         fi
 
         prepare_package_conflicts "$package"
         if "$DRY_RUN"; then
-            run stow -n -v -d "$SCRIPT_DIR" -R -t "$TARGET_HOME" "$package"
+            run stow -n -v -d "$REPOSITORY_DIR" -R -t "$TARGET_HOME" "$package"
         else
-            run stow -d "$SCRIPT_DIR" -R -t "$TARGET_HOME" "$package"
+            run stow -d "$REPOSITORY_DIR" -R -t "$TARGET_HOME" "$package"
         fi
     done
 }
@@ -196,7 +216,7 @@ install_sddm() {
         exit 1
     fi
 
-    local source="$SCRIPT_DIR/sddm"
+    local source="$REPOSITORY_DIR/sddm"
     local theme_root="/usr/share/sddm/themes/silent"
     local file destination
 
@@ -264,6 +284,12 @@ configure_sddm_theme() {
     fi
 
     log "Selected configs/Cyberpunk.conf for SilentSDDM"
+
+    # SilentSDDM calls play() from onSourceChanged, before the media is loaded,
+    # so the call is dropped and the video background stays on its first frame.
+    # autoPlay starts playback once loading finishes.
+    run sed -i 's|autoPlay: false|autoPlay: true|' /usr/share/sddm/themes/silent/Main.qml
+    log "Enabled autoPlay for the SilentSDDM video background"
 }
 
 parse_args() {
@@ -292,6 +318,9 @@ parse_args() {
 main() {
     parse_args "$@"
     setup_repository
+
+    log 'Installing packages'
+    install_packages
 
     log "Installing user configuration into $CONFIG_HOME"
     install_user_configs
