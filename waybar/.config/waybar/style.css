@@ -137,7 +137,21 @@ window#waybar {
     margin: 0;
 }
 
+/* Custom modules are not covered by the label padding rule above. */
+#custom-updates {
+    padding: 0 10px;
+}
+
 /* --- Home Assistant --- */
+/* A 2px progress bar along the bottom edge, like the active workspace
+   underline. Its colour says what it measures, the pNN class its length. */
+#custom-hass {
+    padding: 0 10px 0 18px;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 0 2px;
+}
+
 #custom-hass.offline {
     color: #595c61;
 }
@@ -146,16 +160,53 @@ window#waybar {
     color: #ffa94d;
 }
 
-#custom-hass.window-open,
-#custom-hass.bedtime {
+#custom-hass.window-open {
+    color: #4fc3f7;
+}
+
+#custom-hass.progress-bedtime {
     color: #ffd23f;
 }
 
 #custom-hass.bad-air,
+#custom-hass.progress-bedtime-late,
 #custom-hass.bedtime-overdue {
     color: #e41148;
 }
 
-#custom-hass {
-    padding: 0 16px;
+#custom-hass.progress-air      { background-image: linear-gradient(#4fc3f7, #4fc3f7); }
+#custom-hass.progress-bedtime  { background-image: linear-gradient(#ff8c00, #ff8c00); }
+#custom-hass.progress-bedtime-late { background-image: linear-gradient(#e41148, #e41148); }
+#custom-hass.progress-print    { background-image: linear-gradient(#00ae42, #00ae42); }
+
+#custom-hass.air-done {
+    color: #e41148;
+    background-image: linear-gradient(#e41148, #e41148);
+    animation: hass-blink 1s steps(2) infinite;
 }
+
+@keyframes hass-blink {
+    to { background-image: linear-gradient(transparent, transparent); }
+}
+
+#custom-hass.p0 { background-size: 0% 2px; }
+#custom-hass.p5 { background-size: 5% 2px; }
+#custom-hass.p10 { background-size: 10% 2px; }
+#custom-hass.p15 { background-size: 15% 2px; }
+#custom-hass.p20 { background-size: 20% 2px; }
+#custom-hass.p25 { background-size: 25% 2px; }
+#custom-hass.p30 { background-size: 30% 2px; }
+#custom-hass.p35 { background-size: 35% 2px; }
+#custom-hass.p40 { background-size: 40% 2px; }
+#custom-hass.p45 { background-size: 45% 2px; }
+#custom-hass.p50 { background-size: 50% 2px; }
+#custom-hass.p55 { background-size: 55% 2px; }
+#custom-hass.p60 { background-size: 60% 2px; }
+#custom-hass.p65 { background-size: 65% 2px; }
+#custom-hass.p70 { background-size: 70% 2px; }
+#custom-hass.p75 { background-size: 75% 2px; }
+#custom-hass.p80 { background-size: 80% 2px; }
+#custom-hass.p85 { background-size: 85% 2px; }
+#custom-hass.p90 { background-size: 90% 2px; }
+#custom-hass.p95 { background-size: 95% 2px; }
+#custom-hass.p100 { background-size: 100% 2px; }

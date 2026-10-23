@@ -28,6 +28,9 @@ readonly ENTITIES=(
     light.nerdcave_licht
     weather.luedge
     counter.spezi_kiste
+    binary_sensor.abend_uhr_aktiv
+    sensor.a1mini_0309da442300902_druckfortschritt
+    sensor.a1mini_0309da442300902_verbleibende_zeit
 )
 
 offline() {
@@ -57,6 +60,7 @@ read -r -d '' RENDER <<'EOF'
 def num($d): if (tostring | test("^-?[0-9]+(\\.[0-9]+)?$"))
     then (tonumber * pow(10; $d) | round) / pow(10; $d) else null end;
 def show: if . == null then "–" else tostring end;
+def ts: sub("\\.[0-9]+"; "") | sub("\\+00:00$"; "Z") | fromdateiso8601;
 
 (map(select(.entity_id?)) | INDEX(.entity_id)) as $s
 | def state($id): $s[$id].state // "unknown";
@@ -68,25 +72,57 @@ def show: if . == null then "–" else tostring end;
 | (state("sensor.abend_uhr_restzeit") | num(0)) as $rest
 | (state("binary_sensor.fenster_nerdcave_contact") == "on") as $window_open
 | (attr("climate.heizung_nerdcave_device"; "hvac_action") == "heating") as $heating
-| (try (state("sensor.bettzeit") | sub("\\+00:00$"; "Z") | fromdateiso8601
-        | localtime | strftime("%H:%M")) catch "?") as $bedtime
+| (try (state("sensor.bettzeit") | ts | localtime | strftime("%H:%M")) catch "?") as $bedtime
+| (state("binary_sensor.abend_uhr_aktiv") == "on") as $abend_aktiv
+| (state("sensor.a1mini_0309da442300902_druckfortschritt") | num(0)) as $print_pct
+| (state("sensor.a1mini_0309da442300902_verbleibende_zeit") | num(0)) as $print_rest
+
+# Airing duration in minutes, same thresholds as the HA automation.
+| (attr("weather.luedge"; "temperature") | num(1)) as $outside
+| (if $outside == null then 8 elif $outside < 0 then 4 elif $outside < 5 then 5
+   elif $outside < 10 then 8 elif $outside < 15 then 12 elif $outside < 20 then 15
+   else 20 end) as $air_duration
+| (if $window_open then
+     try ((now - ($s["binary_sensor.fenster_nerdcave_contact"].last_changed | ts)) / 60)
+     catch null
+   else null end) as $air_elapsed
+# Seconds-accurate rest for the bar; the sensor itself only ticks once a minute.
+| (try (((state("sensor.bettzeit") | ts) - now) / 60) catch $rest) as $rest_exact
+
+# Only the most relevant progress is drawn as a thin bar below the module:
+# airing first (time-critical), then bedtime countdown, then 3D print.
+| ([ (if $air_elapsed then
+        {kind: "air", pct: ([$air_elapsed / $air_duration * 100, 100] | min)}
+      else empty end),
+     (if $abend_aktiv and $rest and $rest > 0 and $rest <= 60 then
+        {kind: (if $rest <= 15 then "bedtime-late" else "bedtime" end), pct: ([$rest_exact / 60 * 100, 0] | max)}
+      else empty end),
+     (if $print_pct and $print_pct > 0 and $print_pct < 100 then
+        {kind: "print", pct: $print_pct}
+      else empty end)
+   ] | first // null) as $progress
 
 | [ (if $t then "󰔏 \($t)°" else empty end),
     (if $h then "󰖎 \($h)%" else empty end),
-    (if $window_open then "󰖶" else empty end),
+    (if $air_elapsed then "󰖶 \($air_elapsed | floor)/\($air_duration)m"
+     elif $window_open then "󰖶" else empty end),
     (if $heating then "󰈸" else empty end),
     (if $iaq and $iaq > 175 then "󰌪 \($iaq)" else empty end),
-    (if $rest and $rest <= 60 then "󰒲 \($rest)m" else empty end)
+    (if $abend_aktiv and $rest and $rest <= 60 then "󰒲 \($rest)m" else empty end),
+    (if $print_pct and $print_pct > 0 and $print_pct < 100 then "󰐪 \($print_pct)%" else empty end)
   ] as $text
 
 | [ (if $window_open then "window-open" else empty end),
     (if $heating then "heating" else empty end),
     (if $iaq and $iaq > 175 then "bad-air" else empty end),
-    (if $rest and $rest <= 60 then
-        (if $rest < 0 then "bedtime-overdue" else "bedtime" end) else empty end)
+    (if $abend_aktiv and $rest and $rest <= 0 then "bedtime-overdue" else empty end),
+    (if $air_elapsed and $air_elapsed >= $air_duration then "air-done" else empty end),
+    (if $progress then
+        "progress", "progress-\($progress.kind)", "p\(($progress.pct / 5 | ceil | [., 1] | max) * 5)"
+     else empty end)
   ] as $class
 
-| { text: (if $text == [] then "󰟐 ?" else $text | join("    ") end),
+| { text: (if $text == [] then "󰟐 ?" else $text | join("  ") end),
     tooltip: [
       "Nerdcave: \($t | show) °C, \($h | show) %",
       "IAQ: \($iaq | show)",
@@ -96,7 +132,8 @@ def show: if . == null then "–" else tostring end;
       "Power: PC \(state("sensor.pc_power") | num(0) | show) W, Server \(state("sensor.server_power") | num(0) | show) W",
       "Bedtime: \($bedtime) (\($rest | show) min)",
       "Weather: \(state("weather.luedge")), \(attr("weather.luedge"; "temperature") | num(1) | show) °C",
-      "Spezi: \(state("counter.spezi_kiste")) bottles"
+      "Spezi: \(state("counter.spezi_kiste"))/\(attr("counter.spezi_kiste"; "maximum") | show) bottles",
+      (if $print_pct then "3D print: \($print_pct) %, \($print_rest | show) min left" else empty end)
     ] | join("\n"),
     class: $class }
 EOF

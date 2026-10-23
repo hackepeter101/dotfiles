@@ -173,7 +173,7 @@
         "exec-if": "test -r ~/.config/hass-waybar/env",
         "exec": "~/dotfiles/scripts/hass-waybar.sh",
         "return-type": "json",
-        "interval": 30,
+        "interval": 10,
         "on-click": "xdg-open http://homeassistant.local:8123",
         "escape": true
     },
