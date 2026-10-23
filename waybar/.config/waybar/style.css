@@ -136,3 +136,26 @@ window#waybar {
     padding: 0;
     margin: 0;
 }
+
+/* --- Home Assistant --- */
+#custom-hass.offline {
+    color: #595c61;
+}
+
+#custom-hass.heating {
+    color: #ffa94d;
+}
+
+#custom-hass.window-open,
+#custom-hass.bedtime {
+    color: #ffd23f;
+}
+
+#custom-hass.bad-air,
+#custom-hass.bedtime-overdue {
+    color: #e41148;
+}
+
+#custom-hass {
+    padding: 0 16px;
+}

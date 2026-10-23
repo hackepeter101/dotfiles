@@ -7,7 +7,7 @@
         "cpu",
         "memory",
         "custom/updates",
-        "cava"
+        "custom/hass"
     ],
     "modules-center": [
         "mpris",
@@ -167,6 +167,15 @@
         "actions": {
             "on-click-right": "mode"
         }
+    },
+    "custom/hass": {
+        // Opt-in: hidden unless ~/.config/hass-waybar/env (URL + token, not in git) exists
+        "exec-if": "test -r ~/.config/hass-waybar/env",
+        "exec": "~/dotfiles/scripts/hass-waybar.sh",
+        "return-type": "json",
+        "interval": 30,
+        "on-click": "xdg-open http://homeassistant.local:8123",
+        "escape": true
     },
     "custom/updates": {
         "format": "{}",
