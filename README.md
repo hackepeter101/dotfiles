@@ -9,8 +9,11 @@
 - muted: #595c61
 - warning: #ffd23f
 
-The active palette is defined in `hyprland/.config/hypr/config/colors.lua` and
-is reused by the GTK, Rofi, Kitty, SwayNC, Waybar, and Hyprland layers.
+Hyprland reads these colors from `hyprland/.config/hypr/config/colors.lua`; the
+other apps (GTK, Rofi, Kitty, SwayNC, Waybar) repeat the hex values in their own
+config files.
+
+Font: ComicShannsMono Nerd Font everywhere.
 
 Configuration roots:
 
@@ -26,5 +29,13 @@ scaling, create `~/.config/hypr-monitors.lua`; it should return a table with
 `monitors` and `workspaces` entries matching the structure in
 `hyprland/.config/hypr/config/monitors.lua`.
 
-There is install.sh file but i dont recomend runing it for now as it is made by ai...
+Dependencies are declared in `setup/`:
+
+- `packages-repo.txt` / `packages-aur.txt`: every package the configs use
+- `default-apps.txt`: default applications, applied with `xdg-mime`
+- `stow-packages.txt`: the Stow packages that get linked into `$HOME`
+
+`scripts/install.sh` installs and links all of it (try `--dry-run` first).
+`scripts/doctor.sh` checks a machine against the repository: missing packages,
+fonts, cursor, unlinked or dangling config files, and default apps.
 SDDM files are kept separate because they install under system paths.
