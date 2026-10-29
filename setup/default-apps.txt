@@ -3,7 +3,7 @@
 # keeps every other entry in ~/.config/mimeapps.list.
 
 nemo.desktop                 inode/directory
-org.gnome.TextEditor.desktop text/plain text/markdown
+org.gnome.TextEditor.desktop text/plain
 org.gnome.Loupe.desktop      image/png image/jpeg image/gif image/webp image/svg+xml image/bmp
 org.gnome.Papers.desktop     application/pdf
 vlc.desktop                  video/mp4 video/x-matroska video/webm audio/mpeg audio/flac audio/ogg audio/x-wav
