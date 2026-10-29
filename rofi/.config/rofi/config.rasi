@@ -1,7 +1,7 @@
 configuration {
     modes: [ drun, run, window ];
     terminal: "kitty";
-    font: "Maple Mono 11";
+    font: "ComicShannsMono Nerd Font 11";
     location: 0;
     lines: 8;
     show-icons: true;
