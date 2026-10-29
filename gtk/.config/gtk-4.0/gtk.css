@@ -1,21 +1,48 @@
+/* Circuit Cute palette for libadwaita / GTK 4 apps. */
+
 :root {
-  --accent-bg-color: #c4ede9;
-  --accent-fg-color: #050209;
-  --destructive-color: #c9032f;
+  --window-bg-color: #1e2436;
+  --window-fg-color: #e9eef7;
+  --view-bg-color: #1e2436;
+  --view-fg-color: #e9eef7;
+  --headerbar-bg-color: #262d43;
+  --headerbar-fg-color: #e9eef7;
+  --sidebar-bg-color: #262d43;
+  --sidebar-fg-color: #e9eef7;
+  --popover-bg-color: #262d43;
+  --popover-fg-color: #e9eef7;
+  --dialog-bg-color: #262d43;
+  --dialog-fg-color: #e9eef7;
+  --card-bg-color: #262d43;
+  --card-fg-color: #e9eef7;
+  --accent-color: #8fb0dc;
+  --accent-bg-color: #8fb0dc;
+  --accent-fg-color: #1e2436;
+  --destructive-color: #e0525e;
+  --destructive-bg-color: #e0525e;
+  --destructive-fg-color: #e9eef7;
 }
+
+/* Older libadwaita versions read named colors instead */
+@define-color window_bg_color #1e2436;
+@define-color window_fg_color #e9eef7;
+@define-color view_bg_color #1e2436;
+@define-color view_fg_color #e9eef7;
+@define-color headerbar_bg_color #262d43;
+@define-color headerbar_fg_color #e9eef7;
+@define-color sidebar_bg_color #262d43;
+@define-color sidebar_fg_color #e9eef7;
+@define-color popover_bg_color #262d43;
+@define-color popover_fg_color #e9eef7;
+@define-color card_bg_color #262d43;
+@define-color card_fg_color #e9eef7;
+@define-color accent_color #8fb0dc;
+@define-color accent_bg_color #8fb0dc;
+@define-color accent_fg_color #1e2436;
+@define-color destructive_bg_color #e0525e;
+@define-color destructive_fg_color #e9eef7;
 
 selection {
-  background-color: #c4ede9;
-  color: #050209;
-}
-
-button.suggested-action,
-button:checked {
-  background-color: #c4ede9;
-  color: #050209;
-}
-
-button.destructive-action {
-  background-color: #c9032f;
-  color: #050209;
+  background-color: #f4d58d;
+  color: #1e2436;
 }

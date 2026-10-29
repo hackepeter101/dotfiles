@@ -118,6 +118,21 @@ check_default_apps() {
     fi
 }
 
+check_gsettings() {
+    local schema key value current wrong=()
+
+    while read -r schema key value; do
+        current="$(gsettings get "$schema" "$key" 2>/dev/null)"
+        [[ "$current" == "$value" ]] || wrong+=("$schema $key=${current:-unset}")
+    done < <(read_list gsettings.txt)
+
+    if ((${#wrong[@]})); then
+        fail "gsettings differ from setup/gsettings.txt: ${wrong[*]}"
+    else
+        ok "gsettings applied"
+    fi
+}
+
 check_wallpapers() {
     if compgen -G "$WALLPAPER_DIR/*.*" >/dev/null; then
         ok "wallpapers found in ${WALLPAPER_DIR/#$HOME/\~}"
@@ -127,7 +142,7 @@ check_wallpapers() {
 }
 
 printf 'Packages\n';     check_packages packages-repo.txt; check_packages packages-aur.txt
-printf 'Appearance\n';   check_fonts; check_cursor; check_wallpapers
+printf 'Appearance\n';   check_fonts; check_cursor; check_gsettings; check_wallpapers
 printf 'Links\n';        check_links; check_dangling
 printf 'Default apps\n'; check_default_apps
 

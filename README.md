@@ -34,6 +34,7 @@ Dependencies are declared in `setup/`:
 - `packages-repo.txt` / `packages-aur.txt`: every package the configs use
 - `default-apps.txt`: default applications, applied with `xdg-mime`
 - `stow-packages.txt`: the Stow packages that get linked into `$HOME`
+- `gsettings.txt`: font, cursor and dark mode for apps that ignore `settings.ini`
 
 `scripts/install.sh` installs and links all of it (try `--dry-run` first).
 `scripts/doctor.sh` checks a machine against the repository: missing packages,

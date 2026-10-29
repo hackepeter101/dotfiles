@@ -227,6 +227,16 @@ set_default_apps() {
     done < <(read_list default-apps.txt)
 }
 
+set_gsettings() {
+    # Values may contain spaces (font names), so the key's remainder is
+    # passed as one argument.
+    local schema key value
+
+    while read -r schema key value; do
+        as_target_user gsettings set "$schema" "$key" "$value"
+    done < <(read_list gsettings.txt)
+}
+
 install_user_configs() {
     local packages package
     mapfile -t packages < <(read_list stow-packages.txt)
@@ -372,6 +382,9 @@ main() {
 
     log 'Setting default applications'
     set_default_apps
+
+    log 'Applying desktop settings'
+    set_gsettings
 
     if "$WITH_SDDM"; then
         log 'Installing SDDM configuration'

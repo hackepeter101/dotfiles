@@ -1,0 +1,7 @@
+# Desktop settings that GTK apps (e.g. Nemo) read from gsettings instead of
+# gtk-3.0/settings.ini: <schema> <key> <value>
+
+org.gnome.desktop.interface   font-name    'ComicShannsMono Nerd Font 11'
+org.cinnamon.desktop.interface font-name   'ComicShannsMono Nerd Font 11'
+org.gnome.desktop.interface   cursor-theme 'phinger-cursors-dark'
+org.gnome.desktop.interface   color-scheme 'prefer-dark'

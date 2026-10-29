@@ -1,19 +1,80 @@
-@define-color accent #c4ede9;
-@define-color accent-foreground #050209;
-@define-color destructive #c9032f;
+/* Circuit Cute palette on top of Adwaita-dark (GTK 3, e.g. Nemo). */
 
-selection {
-  background-color: @accent;
-  color: @accent-foreground;
+@define-color bg      #1e2436;
+@define-color surface #262d43;
+@define-color raised  #2e3650;
+@define-color fg      #e9eef7;
+@define-color muted   #5c6a85;
+@define-color blue    #8fb0dc;
+@define-color yellow  #f4d58d;
+@define-color red     #e0525e;
+
+/* Names Adwaita and most GTK 3 apps read */
+@define-color theme_bg_color @bg;
+@define-color theme_fg_color @fg;
+@define-color theme_base_color @bg;
+@define-color theme_text_color @fg;
+@define-color theme_selected_bg_color @yellow;
+@define-color theme_selected_fg_color @bg;
+@define-color theme_unfocused_bg_color @bg;
+@define-color theme_unfocused_fg_color @fg;
+@define-color theme_unfocused_base_color @bg;
+@define-color theme_unfocused_text_color @fg;
+@define-color theme_unfocused_selected_bg_color @yellow;
+@define-color theme_unfocused_selected_fg_color @bg;
+@define-color borders @raised;
+@define-color unfocused_borders @raised;
+
+/* libadwaita-style names, used by newer GTK 3 apps */
+@define-color window_bg_color @bg;
+@define-color window_fg_color @fg;
+@define-color view_bg_color @bg;
+@define-color view_fg_color @fg;
+@define-color headerbar_bg_color @surface;
+@define-color headerbar_fg_color @fg;
+@define-color sidebar_bg_color @surface;
+@define-color sidebar_fg_color @fg;
+@define-color popover_bg_color @surface;
+@define-color popover_fg_color @fg;
+@define-color card_bg_color @surface;
+@define-color card_fg_color @fg;
+@define-color accent_color @blue;
+@define-color accent_bg_color @blue;
+@define-color accent_fg_color @bg;
+@define-color destructive_bg_color @red;
+@define-color destructive_fg_color @fg;
+
+/* Adwaita GTK 3 hardcodes most surfaces, so set them explicitly */
+window, .background, .view, iconview, treeview {
+  background-color: @bg;
+  color: @fg;
+}
+
+headerbar, .titlebar, toolbar, .toolbar, .sidebar, placessidebar, menu, .menu, popover {
+  background-color: @surface;
+  color: @fg;
+}
+
+button {
+  background-image: none;
+  background-color: @raised;
+  border-color: @raised;
+  color: @fg;
+}
+
+selection,
+.view:selected, iconview:selected, treeview:selected, row:selected {
+  background-color: @yellow;
+  color: @bg;
 }
 
 button.suggested-action,
 button:checked {
-  background-color: @accent;
-  color: @accent-foreground;
+  background-color: @blue;
+  color: @bg;
 }
 
 button.destructive-action {
-  background-color: @destructive;
-  color: @accent-foreground;
+  background-color: @red;
+  color: @fg;
 }
