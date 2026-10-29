@@ -40,3 +40,11 @@ Dependencies are declared in `setup/`:
 `scripts/doctor.sh` checks a machine against the repository: missing packages,
 fonts, cursor, unlinked or dangling config files, and default apps.
 SDDM files are kept separate because they install under system paths.
+
+## Disclaimer
+
+The configs and the look are mine. The setup and check scripts
+(`scripts/install.sh`, `scripts/doctor.sh`, `setup/`) and some config fixes
+were written with AI assistance (Claude); those commits are marked
+`Co-Authored-By: Claude`. Read `install.sh` before running it, or start
+with `--dry-run`.
