@@ -1,0 +1,51 @@
+# Packages from the Arch/CachyOS repositories that the configs rely on.
+# One package per line; install.sh installs them and doctor.sh checks them.
+# Add a package here whenever a config starts using a new program.
+
+# Desktop
+hyprland
+hyprlock
+hyprpicker
+xdg-desktop-portal-hyprland
+uwsm
+waybar
+swaync
+rofi
+awww
+xorg-xhost
+
+# Terminal and tools
+kitty
+btop
+cava
+fastfetch
+stow
+yay
+
+# Clipboard, screenshots, notifications
+wl-clipboard
+cliphist
+grim
+slurp
+swappy
+libnotify
+jq
+curl
+
+# Audio, media, hardware
+wireplumber
+pavucontrol
+playerctl
+brightnessctl
+network-manager-applet
+blueman
+kdeconnect
+
+# Default applications (see default-apps.txt)
+xdg-utils
+nemo
+gnome-text-editor
+gnome-calculator
+loupe
+papers
+vlc

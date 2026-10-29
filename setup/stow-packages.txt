@@ -1,0 +1,11 @@
+# Stow packages linked into $HOME by install.sh. Kept explicit so a new
+# directory is never installed by accident.
+
+cava
+fastfetch
+gtk
+hyprland
+kitty
+rofi
+swaync
+waybar

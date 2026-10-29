@@ -127,7 +127,7 @@ run() {
     fi
 }
 
-backup_config_dir() {
+backup_config_path() {
     local destination="$1"
     local backup_path="${destination}.bak"
 
@@ -144,28 +144,37 @@ backup_config_dir() {
 
 prepare_package_conflicts() {
     local package="$1"
-    local source config_entry destination
+    local source destination
 
-    for source in "$REPOSITORY_DIR/$package/.config"/*; do
-        [[ -e "$source" || -L "$source" ]] || continue
-        config_entry="$(basename -- "$source")"
-        destination="$CONFIG_HOME/$config_entry"
+    # Check every file of the package instead of whole directories: an
+    # existing ~/.config/<app> may also hold personal files (bookmarks,
+    # caches) that must stay in place next to the linked configuration.
+    while IFS= read -r -d '' source; do
+        destination="$TARGET_HOME/${source#"$REPOSITORY_DIR/$package/"}"
 
-        # A link already pointing at this package is safe for Stow to restow.
-        if [[ -L "$destination" && "$(readlink -f -- "$destination")" == "$source" ]]; then
+        # Already provided by this package, directly or through a linked
+        # parent directory; Stow restows it safely.
+        if [[ "$(readlink -f -- "$destination")" == "$source" ]]; then
             continue
         fi
 
         if [[ -e "$destination" || -L "$destination" ]]; then
-            backup_config_dir "$destination"
+            backup_config_path "$destination"
         fi
-    done
+    done < <(find "$REPOSITORY_DIR/$package" -type f -print0)
+}
+
+read_list() {
+    # The setup/*.txt lists hold one entry per line; comments and blank
+    # lines are skipped so the lists can stay documented.
+    sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^$/d' "$REPOSITORY_DIR/setup/$1"
 }
 
 install_packages() {
-    # Programs started by the configuration that are not pulled in by any
-    # other package. --needed keeps repeated installs from reinstalling them.
-    local packages=(kdeconnect)
+    # Everything the configuration starts or references is declared in
+    # setup/packages-*.txt. --needed keeps repeated installs from
+    # reinstalling packages that are already present.
+    local packages aur_packages
     local privilege=()
 
     command -v pacman >/dev/null 2>&1 || {
@@ -177,14 +186,50 @@ install_packages() {
         privilege=(sudo)
     fi
 
+    mapfile -t packages < <(read_list packages-repo.txt)
     run "${privilege[@]}" pacman -S --needed --noconfirm "${packages[@]}"
+
+    # AUR helpers refuse to run as root, so they always run as the user
+    # whose configuration is being installed.
+    mapfile -t aur_packages < <(read_list packages-aur.txt)
+    local aur_helper=''
+    if command -v yay >/dev/null 2>&1; then
+        aur_helper='yay'
+    elif command -v paru >/dev/null 2>&1; then
+        aur_helper='paru'
+    fi
+
+    if [[ -z "$aur_helper" ]]; then
+        printf 'Warning: no AUR helper found; install manually: %s\n' "${aur_packages[*]}" >&2
+    else
+        as_target_user "$aur_helper" -S --needed "${aur_packages[@]}"
+    fi
+}
+
+as_target_user() {
+    # Run a command as the user whose configuration is installed, also when
+    # the script itself runs as root through sudo.
+    if [[ "$EUID" -eq 0 ]]; then
+        run sudo -u "$TARGET_USER" env HOME="$TARGET_HOME" "$@"
+    else
+        run "$@"
+    fi
+}
+
+set_default_apps() {
+    # xdg-mime only rewrites the listed types, so personal associations in
+    # ~/.config/mimeapps.list (mail client, URL handlers, ...) are kept.
+    local desktop_file mime_types
+
+    while read -r desktop_file mime_types; do
+        # shellcheck disable=SC2086 # mime_types is a space-separated list
+        as_target_user xdg-mime default "$desktop_file" $mime_types
+    done < <(read_list default-apps.txt)
 }
 
 install_user_configs() {
-    # Keep this list explicit so a future repository directory is not
-    # installed accidentally just because it happens to contain .config.
-    local packages=(cava fastfetch gtk hyprland kitty rofi swaync waybar)
-    local package
+    local packages package
+    mapfile -t packages < <(read_list stow-packages.txt)
 
     command -v stow >/dev/null 2>&1 || {
         printf '%s\n' 'Error: GNU Stow is required but was not found in PATH.' >&2
@@ -324,6 +369,9 @@ main() {
 
     log "Installing user configuration into $CONFIG_HOME"
     install_user_configs
+
+    log 'Setting default applications'
+    set_default_apps
 
     if "$WITH_SDDM"; then
         log 'Installing SDDM configuration'

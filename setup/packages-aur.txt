@@ -1,0 +1,6 @@
+# AUR packages, installed through yay or paru as the normal user.
+
+ttf-comic-shanns-nerd
+phinger-cursors
+wl-screenrec
+brave-origin
