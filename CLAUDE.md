@@ -5,6 +5,8 @@
 - Branch `master`: public (`origin`), laptop setup, everything shared by both machines.
 - Branch `pc`: private (`private` remote), the PC's playful theme. Shared fixes go to
   `master` first, then `git merge master` into `pc`.
+- Task list: `TODO.md` on the `pc` branch. Read it at the start of a session and tick
+  items you finish there.
 
 ## Reliability first (no loose ends)
 - Every program, font, cursor or icon a config references must be installed and listed
